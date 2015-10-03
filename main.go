@@ -9,8 +9,12 @@ import (
 	"github.com/codegangsta/negroni"
 )
 
-func handleNow(w http.ResponseWriter, req *http.Request) {
-	fmt.Fprint(w, time.Now())
+func handleEnvNow(w http.ResponseWriter, req *http.Request) {
+	fmt.Fprintln(w, time.Now())
+
+	for _, env := range os.Environ() {
+		fmt.Fprintln(w, env)
+	}
 }
 
 func main() {
@@ -21,6 +25,6 @@ func main() {
 	}
 
 	n := negroni.Classic()
-	n.UseHandler(http.HandlerFunc(handleNow))
+	n.UseHandler(http.HandlerFunc(handleEnvNow))
 	n.Run(host + ":" + port)
 }

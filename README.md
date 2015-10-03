@@ -1,6 +1,6 @@
 # go-api-now
 
-This is a very basic HTTP API that returns current time in Go.
+This is a very basic HTTP API that returns current time and environment in Go.
 
 In default, the api server is listening to tcp/8000. You can change the port by specifying `PORT` environment variable.
 

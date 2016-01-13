@@ -1,15 +1,16 @@
 package main
 
 import (
+	"flag"
 	"fmt"
-	"net/http"
+	"io"
 	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
-func handleEnvNow(w http.ResponseWriter, req *http.Request) {
+func printEnvNow(w io.Writer) {
 	fmt.Fprintln(w, time.Now())
 
 	for _, env := range os.Environ() {
@@ -18,6 +19,19 @@ func handleEnvNow(w http.ResponseWriter, req *http.Request) {
 }
 
 func main() {
+	var httpMode = flag.Bool("http", true, "enable HTTP server")
+	flag.Parse()
+
+	if *httpMode {
+		HTTP()
+	} else {
+		for range time.Tick(10 * time.Second) {
+			printEnvNow(os.Stdout)
+		}
+	}
+}
+
+func HTTP() {
 	port := os.Getenv("PORT")
 	host := os.Getenv("HOST")
 	if port == "" {
@@ -25,6 +39,8 @@ func main() {
 	}
 
 	r := gin.Default()
-	r.GET("/", gin.WrapF(handleEnvNow))
+	r.GET("/", func(ctx *gin.Context) {
+		printEnvNow(ctx.Writer)
+	})
 	r.Run(host + ":" + port)
 }

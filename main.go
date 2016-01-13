@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/codegangsta/negroni"
+	"github.com/gin-gonic/gin"
 )
 
 func handleEnvNow(w http.ResponseWriter, req *http.Request) {
@@ -24,7 +24,7 @@ func main() {
 		port = "8000"
 	}
 
-	n := negroni.Classic()
-	n.UseHandler(http.HandlerFunc(handleEnvNow))
-	n.Run(host + ":" + port)
+	r := gin.Default()
+	r.GET("/", gin.WrapF(handleEnvNow))
+	r.Run(host + ":" + port)
 }

@@ -10,7 +10,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+var Version = "201601162148"
+
 func printEnvNow(w io.Writer) {
+	fmt.Fprintln(w, "version:", Version)
 	fmt.Fprintln(w, time.Now())
 
 	for _, env := range os.Environ() {

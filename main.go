@@ -7,6 +7,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/fukata/golang-stats-api-handler"
 	"github.com/gin-gonic/gin"
 )
 
@@ -45,5 +46,6 @@ func HTTP() {
 	r.GET("/", func(ctx *gin.Context) {
 		printEnvNow(ctx.Writer)
 	})
+	r.GET("/_stats", gin.WrapF(stats_api.Handler))
 	r.Run(host + ":" + port)
 }

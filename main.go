@@ -46,6 +46,9 @@ func HTTP() {
 	r.GET("/", func(ctx *gin.Context) {
 		printEnvNow(ctx.Writer)
 	})
+	r.HEAD("/", func(ctx *gin.Context) {
+		printEnvNow(ctx.Writer)
+	})
 	r.GET("/_stats", gin.WrapF(stats_api.Handler))
 	r.Run(host + ":" + port)
 }

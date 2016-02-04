@@ -49,6 +49,9 @@ func HTTP() {
 	r.GET("/json", func(ctx *gin.Context) {
 		ctx.File("dummy.json")
 	})
+	r.HEAD("/json", func(ctx *gin.Context) {
+		ctx.File("dummy.json")
+	})
 	r.HEAD("/", func(ctx *gin.Context) {
 		printEnvNow(ctx.Writer)
 	})

@@ -16,6 +16,16 @@ e.g.
 - Heroku integration
 - ...
 
+# Endpoints
+
+- `GET /`
+  - returns the current environment variables
+  - `?sleep=<duration>`: sleep [`<duration>`](https://golang.org/pkg/time/#ParseDuration) before returns a response
+- `GET /json`
+  - returns the large JSON file
+- `GET /_stats`
+  - returns the current Go's runtime stats
+
 # Usage
 
 Build:

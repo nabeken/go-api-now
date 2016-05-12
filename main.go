@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"net/http"
 	"os"
 	"time"
 
@@ -44,6 +45,14 @@ func HTTP() {
 
 	r := gin.Default()
 	r.GET("/", func(ctx *gin.Context) {
+		if dur := ctx.Query("sleep"); dur != "" {
+			duration, err := time.ParseDuration(dur)
+			if err != nil {
+				ctx.AbortWithError(http.StatusBadRequest, err)
+				return
+			}
+			time.Sleep(duration)
+		}
 		printEnvNow(ctx.Writer)
 	})
 	r.GET("/json", func(ctx *gin.Context) {

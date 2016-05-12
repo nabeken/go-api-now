@@ -1,4 +1,4 @@
-FROM golang:1.5-alpine
+FROM golang:1.6-alpine
 MAINTAINER <nabeken@tknetworks.org>
 
 ENV GIN_MODE=release

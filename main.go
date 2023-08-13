@@ -1,25 +1,34 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
-	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"time"
 
-	"github.com/fukata/golang-stats-api-handler"
+	stats_api "github.com/fukata/golang-stats-api-handler"
 	"github.com/gin-gonic/gin"
 )
 
+// Version is to embed the version string
 var Version = "201601170013"
 
-func printEnvNow(w io.Writer) {
-	fmt.Fprintln(w, "version:", Version)
-	fmt.Fprintln(w, time.Now())
+type response struct {
+	Version string    `json:"version"`
+	Now     time.Time `json:"now"`
+}
 
-	for _, env := range os.Environ() {
-		fmt.Fprintln(w, env)
+func printNow(w io.Writer) {
+	err := json.NewEncoder(w).Encode(&response{
+		Version: Version,
+		Now:     time.Now(),
+	})
+
+	if err != nil {
+		log.Print("ERROR:", err)
 	}
 }
 
@@ -31,11 +40,12 @@ func main() {
 		HTTP()
 	} else {
 		for range time.Tick(10 * time.Second) {
-			printEnvNow(os.Stdout)
+			printNow(os.Stdout)
 		}
 	}
 }
 
+// HTTP runs the HTTP server
 func HTTP() {
 	port := os.Getenv("PORT")
 	host := os.Getenv("HOST")
@@ -53,7 +63,7 @@ func HTTP() {
 			}
 			time.Sleep(duration)
 		}
-		printEnvNow(ctx.Writer)
+		printNow(ctx.Writer)
 	})
 	r.GET("/json", func(ctx *gin.Context) {
 		ctx.File("dummy.json")
@@ -62,7 +72,7 @@ func HTTP() {
 		ctx.File("dummy.json")
 	})
 	r.HEAD("/", func(ctx *gin.Context) {
-		printEnvNow(ctx.Writer)
+		printNow(ctx.Writer)
 	})
 	r.GET("/_stats", gin.WrapF(stats_api.Handler))
 	r.Run(host + ":" + port)

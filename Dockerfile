@@ -1,24 +1,28 @@
-FROM golang:1.10.3-alpine AS builder
-MAINTAINER <nabeken@tknetworks.org>
+# syntax=docker/dockerfile:1.3
+FROM golang:1.20.7 AS builder
 
+SHELL ["/bin/bash", "-c"]
+
+ENV GOMODCACHE=/root/.cache/gomod
+ENV CGO_ENABLED=0
 ENV REPO=github.com/nabeken/go-api-now
 
-RUN apk add --no-cache --update git
+WORKDIR /go/src
+COPY . ./
 
-COPY . src/$REPO
-WORKDIR /go/src/$REPO
+RUN --mount=type=cache,target=/root/.cache \
+  set -eo pipefail; \
+  go get -d -v ./...; \
+  go build -v -o ../bin/go-api-now
 
-RUN go get -d -v ./...
-RUN go install -v
+FROM gcr.io/distroless/static-debian11:latest
 
-FROM alpine:3.8
-MAINTAINER <nabeken@tknetworks.org>
+# for debugging
+#FROM gcr.io/distroless/static-debian11:debug
+#SHELL ["/busybox/sh", "-c"]
 
-RUN apk add --no-cache \
-        ca-certificates
+COPY --from=builder /go/bin/go-api-now /
 
-COPY --from=builder /go/bin/go-api-now /usr/local/bin
-ENV GIN_MODE=release
 EXPOSE 8000
-USER nobody
-CMD ["go-api-now"]
+
+CMD ["/go-api-now"]

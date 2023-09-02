@@ -81,6 +81,36 @@ func HTTP() {
 		printNow(w)
 	})
 
+	r.Get("/events", func(w http.ResponseWriter, r *http.Request) {
+		defer func() {
+			log.Println("INFO: events: client disconnect")
+		}()
+
+		flusher, ok := w.(http.Flusher)
+		if !ok {
+			log.Println("ERROR: no flusher found")
+			return
+		}
+
+		w.Header().Set("Content-Type", "text/event-stream")
+		w.Header().Set("Cache-Control", "no-store")
+
+		t := time.NewTicker(1 * time.Second)
+		defer t.Stop()
+
+		go func() {
+			for {
+				select {
+				case now := <-t.C:
+					fmt.Fprintf(w, "data: %d\n\n", now.Unix())
+					flusher.Flush()
+				}
+			}
+		}()
+
+		<-r.Context().Done()
+	})
+
 	r.Get("/json", staticFileServer(
 		http.FS(embeddedFS),
 		"dummy.json",

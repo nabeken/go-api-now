@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.2.0](https://github.com/nabeken/go-api-now/compare/v1.1.0...v1.2.0) (2023-09-02)
+
+
+### Features
+
+* update the version string ([#18](https://github.com/nabeken/go-api-now/issues/18)) ([4dc646f](https://github.com/nabeken/go-api-now/commit/4dc646f0e28de50b7cf34a5dc09b0474a8076dbd))
+
+
+### Bug Fixes
+
+* fix the version string ([#23](https://github.com/nabeken/go-api-now/issues/23)) ([9263487](https://github.com/nabeken/go-api-now/commit/9263487a0bce3ded436f880ddf135dcaebf7684d))
+
 ## [1.1.1](https://github.com/nabeken/go-api-now/compare/v1.1.0...v1.1.1) (2023-09-02)
 
 

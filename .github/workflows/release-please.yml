@@ -17,4 +17,3 @@ jobs:
         with:
           release-type: go
           package-name: go-api-now
-          release-as: '1.0.0'

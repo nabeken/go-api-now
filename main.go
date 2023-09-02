@@ -1,20 +1,28 @@
 package main
 
 import (
+	"embed"
 	"encoding/json"
+	"errors"
 	"flag"
+	"fmt"
 	"io"
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
 	"time"
 
 	stats_api "github.com/fukata/golang-stats-api-handler"
-	"github.com/gin-gonic/gin"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 )
 
 // Version is to embed the version string
 var Version = "201601170013"
+
+//go:embed dummy.json
+var embeddedFS embed.FS
 
 type response struct {
 	Version string    `json:"version"`
@@ -53,27 +61,57 @@ func HTTP() {
 		port = "8000"
 	}
 
-	r := gin.Default()
-	r.GET("/", func(ctx *gin.Context) {
-		if dur := ctx.Query("sleep"); dur != "" {
+	r := chi.NewRouter()
+	r.Use(middleware.RequestID)
+	r.Use(middleware.RealIP)
+	r.Use(middleware.Logger)
+	r.Use(middleware.Recoverer)
+
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		if dur := r.URL.Query().Get("sleep"); dur != "" {
 			duration, err := time.ParseDuration(dur)
 			if err != nil {
-				ctx.AbortWithError(http.StatusBadRequest, err)
+				http.Error(w, err.Error(), http.StatusBadRequest)
 				return
 			}
+
 			time.Sleep(duration)
 		}
-		printNow(ctx.Writer)
+
+		printNow(w)
 	})
-	r.GET("/json", func(ctx *gin.Context) {
-		ctx.File("dummy.json")
-	})
-	r.HEAD("/json", func(ctx *gin.Context) {
-		ctx.File("dummy.json")
-	})
-	r.HEAD("/", func(ctx *gin.Context) {
-		printNow(ctx.Writer)
-	})
-	r.GET("/_stats", gin.WrapF(stats_api.Handler))
-	r.Run(host + ":" + port)
+
+	r.Get("/json", staticFileServer(
+		http.FS(embeddedFS),
+		"dummy.json",
+	))
+
+	r.Get("/_stats", stats_api.Handler)
+
+	http.ListenAndServe(host+":"+port, r)
+}
+
+func staticFileServer(hfs http.FileSystem, fn string) func(w http.ResponseWriter, r *http.Request) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		f, err := hfs.Open(fn)
+
+		switch {
+		case errors.Is(err, fs.ErrNotExist):
+			http.Error(w, "Not Found", http.StatusNotFound)
+			return
+		case err != nil:
+			http.Error(w, fmt.Errorf("opening file: %w", err).Error(), http.StatusInternalServerError)
+			return
+		}
+
+		defer f.Close()
+
+		d, err := f.Stat()
+		if err != nil {
+			http.Error(w, fmt.Errorf("reading file: %w", err).Error(), http.StatusInternalServerError)
+			return
+		}
+
+		http.ServeContent(w, r, fn, d.ModTime(), f)
+	}
 }

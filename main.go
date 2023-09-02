@@ -19,7 +19,7 @@ import (
 )
 
 // Version is to embed the version string
-var Version = "201601170013"
+var Version = "202309020000"
 
 //go:embed dummy.json
 var embeddedFS embed.FS

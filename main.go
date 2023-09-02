@@ -19,7 +19,7 @@ import (
 )
 
 // Version is to embed the version string
-var Version = "202309020000.hotfix"
+var Version = "202309030000"
 
 //go:embed dummy.json
 var embeddedFS embed.FS

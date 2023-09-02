@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/nabeken/go-api-now/compare/v1.0.0...v1.1.0) (2023-09-02)
+
+
+### Features
+
+* **api:** add /events endpoint with Server-Sent Events ([#15](https://github.com/nabeken/go-api-now/issues/15)) ([f40e6f1](https://github.com/nabeken/go-api-now/commit/f40e6f1e84194b8b2bb2a09f4f0f62ec4c4392f0))
+
 ## 1.0.0 (2023-09-02)
 
 

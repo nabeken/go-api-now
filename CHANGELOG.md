@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/nabeken/go-api-now/compare/v1.1.0...v1.1.1) (2023-09-02)
+
+
+### Bug Fixes
+
+* serve as a hotfix test ([#20](https://github.com/nabeken/go-api-now/issues/20)) ([2e1f8be](https://github.com/nabeken/go-api-now/commit/2e1f8be37e1a3d05b6f77480f3ecb1bd7c675ca3))
+
 ## [1.1.0](https://github.com/nabeken/go-api-now/compare/v1.0.0...v1.1.0) (2023-09-02)
 
 

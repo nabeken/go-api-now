@@ -1,19 +1,18 @@
 # go-api-now
 
-This is a very basic HTTP API that returns current time and environment in Go.
+`go-api-now` is a very basic HTTP API that returns the current time written in Go.
 
 In default, the api server is listening to tcp/8000. You can change the port by specifying `PORT` environment variable.
 
 # Why?
 
-Sometimes I want to test Docker integration so I need a container image suitable for testing.
+Sometimes I want a simple deployable HTTP server to test various integrations.
 
-e.g.
-
-- AWS ECS integration
-- AWS CodeDeploy integration
-- Kubernetes integration
-- Heroku integration
+For example:
+- To test Amazon ECS integration
+- To test Kubernetes integration
+- To test a release pipeline
+- To test CI/CD pipeline
 - ...
 
 # Endpoints
@@ -25,25 +24,18 @@ e.g.
   - returns the large JSON file
 - `GET /_stats`
   - returns the current Go's runtime stats
+- `GET /events`
+  - streams the current time with Server-Sent Events ("SSE")
 
 # Usage
 
 Build:
-
 ```sh
-$ docker build -t nabeken/go-api-now:latest .
+docker compose build
 ```
 
 Run:
-
 ```sh
-$ docker run -d -p 8000:8000 nabeken/go-api-now:latest
-$ curl -i http://<docker>:8000
-```
-
-Or
-
-```sh
-$ docker run -d -p 9999:9999 -e PORT=9999 nabeken/go-api-now:latest
-$ curl -i http://<docker>:9999
+docker compose up -d
+curl -i http://127.0.0.1:8000
 ```

@@ -9,17 +9,18 @@
       const app = document.getElementById('app');
 
       function LikeButton({ names }) {
-        const [likes, setLikes] = React.useState(0);
+        const [idx, setIdx] = React.useState(0);
+        const hasNext = idx < names.length - 1;
 
         function handleClick() {
-          if (likes + 1 >= names.length) {
-            setLikes(0);
+          if (hasNext) {
+            setIdx(idx+1);
           } else {
-            setLikes(likes+1);
+            setIdx(0);
           }
         }
 
-        return <button onClick={handleClick}>Like ({names[likes]})</button>;
+        return <button onClick={handleClick}>Like ({names[idx]})</button>;
       }
 
       function Homepage() {

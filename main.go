@@ -132,6 +132,8 @@ func HTTP() {
 		r.Get("/_stats", stats_api.Handler)
 	})
 
+	r.Handle("/", http.FileServer(http.Dir("./contents")))
+
 	log.Printf("Listening to %s", host+":"+port)
 
 	http.ListenAndServe(host+":"+port, r)

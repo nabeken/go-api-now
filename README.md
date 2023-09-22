@@ -17,14 +17,14 @@ For example:
 
 # Endpoints
 
-- `GET /`
+- `GET /api/ping`
   - returns the current environment variables
   - `?sleep=<duration>`: sleep [`<duration>`](https://golang.org/pkg/time/#ParseDuration) before returns a response
-- `GET /json`
+- `GET /api/json`
   - returns the large JSON file
-- `GET /_stats`
+- `GET /api/_stats`
   - returns the current Go's runtime stats
-- `GET /events`
+- `GET /api/events`
   - streams the current time with Server-Sent Events ("SSE")
 
 # Usage

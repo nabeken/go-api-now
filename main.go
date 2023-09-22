@@ -53,6 +53,17 @@ func main() {
 	}
 }
 
+func RequestIDWriter(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		reqID := middleware.GetReqID(r.Context())
+		if reqID != "" {
+			w.Header().Add("X-Request-ID", reqID)
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
 // HTTP runs the HTTP server
 func HTTP() {
 	port := os.Getenv("PORT")
@@ -63,60 +74,65 @@ func HTTP() {
 
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)
+	r.Use(RequestIDWriter)
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 
-	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-		if dur := r.URL.Query().Get("sleep"); dur != "" {
-			duration, err := time.ParseDuration(dur)
-			if err != nil {
-				http.Error(w, err.Error(), http.StatusBadRequest)
+	r.Route("/api", func(r chi.Router) {
+		r.Get("/ping", func(w http.ResponseWriter, r *http.Request) {
+			if dur := r.URL.Query().Get("sleep"); dur != "" {
+				duration, err := time.ParseDuration(dur)
+				if err != nil {
+					http.Error(w, err.Error(), http.StatusBadRequest)
+					return
+				}
+
+				time.Sleep(duration)
+			}
+
+			printNow(w)
+		})
+
+		r.Get("/events", func(w http.ResponseWriter, r *http.Request) {
+			defer func() {
+				log.Println("INFO: events: client disconnect")
+			}()
+
+			flusher, ok := w.(http.Flusher)
+			if !ok {
+				log.Println("ERROR: no flusher found")
 				return
 			}
 
-			time.Sleep(duration)
-		}
+			w.Header().Set("Content-Type", "text/event-stream")
+			w.Header().Set("Cache-Control", "no-store")
 
-		printNow(w)
-	})
+			t := time.NewTicker(1 * time.Second)
+			defer t.Stop()
 
-	r.Get("/events", func(w http.ResponseWriter, r *http.Request) {
-		defer func() {
-			log.Println("INFO: events: client disconnect")
-		}()
-
-		flusher, ok := w.(http.Flusher)
-		if !ok {
-			log.Println("ERROR: no flusher found")
-			return
-		}
-
-		w.Header().Set("Content-Type", "text/event-stream")
-		w.Header().Set("Cache-Control", "no-store")
-
-		t := time.NewTicker(1 * time.Second)
-		defer t.Stop()
-
-		go func() {
-			for {
-				select {
-				case now := <-t.C:
-					fmt.Fprintf(w, "data: %d\n\n", now.Unix())
-					flusher.Flush()
+			go func() {
+				for {
+					select {
+					case now := <-t.C:
+						fmt.Fprintf(w, "data: %d\n\n", now.Unix())
+						flusher.Flush()
+					}
 				}
-			}
-		}()
+			}()
 
-		<-r.Context().Done()
+			<-r.Context().Done()
+		})
+
+		r.Get("/json", staticFileServer(
+			http.FS(embeddedFS),
+			"dummy.json",
+		))
+
+		r.Get("/_stats", stats_api.Handler)
 	})
 
-	r.Get("/json", staticFileServer(
-		http.FS(embeddedFS),
-		"dummy.json",
-	))
-
-	r.Get("/_stats", stats_api.Handler)
+	log.Printf("Listening to %s", host+":"+port)
 
 	http.ListenAndServe(host+":"+port, r)
 }

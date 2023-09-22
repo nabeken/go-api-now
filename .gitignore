@@ -23,5 +23,9 @@ _testmain.go
 *.test
 *.prof
 
+# ignore node modules
+node_modules
+.next
+
 # ignore local build
 /go-api-now

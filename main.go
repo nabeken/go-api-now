@@ -10,6 +10,8 @@ import (
 	"io/fs"
 	"log"
 	"net/http"
+	"net/http/httputil"
+	"net/url"
 	"os"
 	"time"
 
@@ -42,10 +44,11 @@ func printNow(w io.Writer) {
 
 func main() {
 	var httpMode = flag.Bool("http", true, "enable HTTP server")
+	var devMode = flag.Bool("dev", true, "enable the proxy for the next dev server")
 	flag.Parse()
 
 	if *httpMode {
-		HTTP()
+		HTTP(*devMode)
 	} else {
 		for range time.Tick(10 * time.Second) {
 			printNow(os.Stdout)
@@ -65,7 +68,7 @@ func RequestIDWriter(next http.Handler) http.Handler {
 }
 
 // HTTP runs the HTTP server
-func HTTP() {
+func HTTP(devMode bool) {
 	port := os.Getenv("PORT")
 	host := os.Getenv("HOST")
 	if port == "" {
@@ -90,6 +93,8 @@ func HTTP() {
 
 				time.Sleep(duration)
 			}
+
+			w.Header().Add("Content-Type", "application/json")
 
 			printNow(w)
 		})
@@ -132,7 +137,24 @@ func HTTP() {
 		r.Get("/_stats", stats_api.Handler)
 	})
 
-	r.Handle("/", http.FileServer(http.Dir("./contents")))
+	if devMode {
+		log.Print("Setting the proxy for the next dev server...")
+
+		// proxy to the local next dev server
+		rpURL, err := url.Parse("http://localhost:3000")
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		r.Handle("/*", &httputil.ReverseProxy{
+			Rewrite: func(r *httputil.ProxyRequest) {
+				r.SetXForwarded()
+				r.SetURL(rpURL)
+			},
+		})
+	} else {
+		r.Handle("/*", http.FileServer(http.Dir("./public")))
+	}
 
 	log.Printf("Listening to %s", host+":"+port)
 

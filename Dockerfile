@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:1.6
+# syntax=docker/dockerfile:1.7
 FROM golang:1.22.1 AS builder
 
 SHELL ["/bin/bash", "-c"]

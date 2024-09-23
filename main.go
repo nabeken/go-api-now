@@ -27,14 +27,21 @@ var Version = "202309030000"
 var embeddedFS embed.FS
 
 type response struct {
-	Version string    `json:"version"`
-	Now     time.Time `json:"now"`
+	Version    string    `json:"version"`
+	RemoteAddr string    `json:"remote_addr"`
+	Now        time.Time `json:"now"`
 }
 
-func printNow(w io.Writer) {
+func printNow(w io.Writer, r *http.Request) {
+	var remoteAddr string
+	if r != nil {
+		remoteAddr = r.RemoteAddr
+	}
+
 	err := json.NewEncoder(w).Encode(&response{
-		Version: Version,
-		Now:     time.Now(),
+		Version:    Version,
+		Now:        time.Now(),
+		RemoteAddr: remoteAddr,
 	})
 
 	if err != nil {
@@ -51,7 +58,7 @@ func main() {
 		HTTP(*devMode)
 	} else {
 		for range time.Tick(10 * time.Second) {
-			printNow(os.Stdout)
+			printNow(os.Stdout, nil)
 		}
 	}
 }
@@ -96,7 +103,7 @@ func HTTP(devMode bool) {
 
 			w.Header().Add("Content-Type", "application/json")
 
-			printNow(w)
+			printNow(w, r)
 		})
 
 		r.Get("/events", func(w http.ResponseWriter, r *http.Request) {

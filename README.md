@@ -46,7 +46,8 @@ npm run start
 
 Build:
 ```sh
-docker compose build
+go build
+./go-api-now
 ```
 
 Run:

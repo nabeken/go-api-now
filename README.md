@@ -29,6 +29,21 @@ For example:
 
 # Usage
 
+## Frontend (Next.js)
+
+Development server:
+```sh
+npm run dev
+```
+
+Production build:
+```sh
+npm run build
+npm run start
+```
+
+## Backend (Docker)
+
 Build:
 ```sh
 docker compose build

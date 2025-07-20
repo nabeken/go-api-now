@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.0.1](https://github.com/nabeken/go-api-now/compare/v2.0.0...v2.0.1) (2025-07-20)
+
+
+### Bug Fixes
+
+* **deps:** update dependency golang to v1.24.5 ([#219](https://github.com/nabeken/go-api-now/issues/219)) ([d5f0144](https://github.com/nabeken/go-api-now/commit/d5f0144677b81bde8dca8735a6cc5c29de851cbd))
+* **deps:** update dependency next to v15.4.2 ([#222](https://github.com/nabeken/go-api-now/issues/222)) ([e4b51e9](https://github.com/nabeken/go-api-now/commit/e4b51e9984c989458fb369e2aee8ccc9de195aa7))
+* **deps:** update golang docker tag to v1.24.5 ([#221](https://github.com/nabeken/go-api-now/issues/221)) ([7a7475f](https://github.com/nabeken/go-api-now/commit/7a7475fcf2a823bcc61f52da5f5c0c406ba512cd))
+
 ## [2.0.0](https://github.com/nabeken/go-api-now/compare/v1.2.0...v2.0.0) (2025-07-05)
 
 

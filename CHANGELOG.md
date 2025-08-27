@@ -1,5 +1,27 @@
 # Changelog
 
+## [2.0.1](https://github.com/nabeken/go-api-now/compare/v2.0.0...v2.0.1) (2025-08-27)
+
+
+### Bug Fixes
+
+* **deps:** update actions/checkout action to v5 ([#231](https://github.com/nabeken/go-api-now/issues/231)) ([3074541](https://github.com/nabeken/go-api-now/commit/3074541d0c55ae725a515101247bec37d2281bc1))
+* **deps:** update actions/checkout digest to 08eba0b ([#230](https://github.com/nabeken/go-api-now/issues/230)) ([1cadbc7](https://github.com/nabeken/go-api-now/commit/1cadbc73dee710b3584ace0f22937b552c5ad842))
+* **deps:** update dependency golang to v1.24.5 ([#219](https://github.com/nabeken/go-api-now/issues/219)) ([d5f0144](https://github.com/nabeken/go-api-now/commit/d5f0144677b81bde8dca8735a6cc5c29de851cbd))
+* **deps:** update dependency golang to v1.24.6 ([#227](https://github.com/nabeken/go-api-now/issues/227)) ([c05d93c](https://github.com/nabeken/go-api-now/commit/c05d93c1051b8274b30e09631977d3286837355a))
+* **deps:** update dependency next to v15.4.2 ([#222](https://github.com/nabeken/go-api-now/issues/222)) ([e4b51e9](https://github.com/nabeken/go-api-now/commit/e4b51e9984c989458fb369e2aee8ccc9de195aa7))
+* **deps:** update dependency next to v15.4.5 ([#223](https://github.com/nabeken/go-api-now/issues/223)) ([0c2f5dd](https://github.com/nabeken/go-api-now/commit/0c2f5dd9870c359c72e253500a70c15b411e40d3))
+* **deps:** update dependency next to v15.4.6 ([#228](https://github.com/nabeken/go-api-now/issues/228)) ([21263a7](https://github.com/nabeken/go-api-now/commit/21263a7d21eaa8f895975340552ae18683611521))
+* **deps:** update dependency next to v15.5.2 ([#234](https://github.com/nabeken/go-api-now/issues/234)) ([2e68b8e](https://github.com/nabeken/go-api-now/commit/2e68b8e51245970a443195b39778cb7f76b87793))
+* **deps:** update dependency swr to v2.3.5 ([#229](https://github.com/nabeken/go-api-now/issues/229)) ([6812c23](https://github.com/nabeken/go-api-now/commit/6812c23dba97a25080539b9a9a2c691b87d6a316))
+* **deps:** update dependency swr to v2.3.6 ([#232](https://github.com/nabeken/go-api-now/issues/232)) ([81d0937](https://github.com/nabeken/go-api-now/commit/81d09373d82f57872aeed069a700a0113637717e))
+* **deps:** update docker/login-action digest to 184bdaa ([#226](https://github.com/nabeken/go-api-now/issues/226)) ([7328b93](https://github.com/nabeken/go-api-now/commit/7328b937bc822bef3b07fa696018f71a183d5445))
+* **deps:** update docker/metadata-action digest to c1e5197 ([#225](https://github.com/nabeken/go-api-now/issues/225)) ([a309546](https://github.com/nabeken/go-api-now/commit/a30954642edfb20d6d19b28714b449d17328b30c))
+* **deps:** update golang docker tag to v1.24.5 ([#221](https://github.com/nabeken/go-api-now/issues/221)) ([7a7475f](https://github.com/nabeken/go-api-now/commit/7a7475fcf2a823bcc61f52da5f5c0c406ba512cd))
+* **deps:** update googleapis/release-please-action digest to c2a5a2b ([#235](https://github.com/nabeken/go-api-now/issues/235)) ([22baaff](https://github.com/nabeken/go-api-now/commit/22baaff45945773151f57ad926b1166bbc0e6151))
+* **deps:** update module github.com/go-chi/chi/v5 to v5.2.3 ([#236](https://github.com/nabeken/go-api-now/issues/236)) ([d3afd77](https://github.com/nabeken/go-api-now/commit/d3afd77fe7789746d7715976ca18604e9d744691))
+* **deps:** update react monorepo to v19.1.1 ([#224](https://github.com/nabeken/go-api-now/issues/224)) ([35ae71b](https://github.com/nabeken/go-api-now/commit/35ae71b832c5962ec58fdcc87563dfab746bec2c))
+
 ## [2.0.0](https://github.com/nabeken/go-api-now/compare/v1.2.0...v2.0.0) (2025-07-05)
 
 

@@ -4,5 +4,5 @@ go 1.23
 
 require (
 	github.com/fukata/golang-stats-api-handler v1.0.0
-	github.com/go-chi/chi/v5 v5.3.0
+	github.com/go-chi/chi/v5 v5.3.1
 )

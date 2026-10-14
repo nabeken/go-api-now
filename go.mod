@@ -1,8 +1,8 @@
 module github.com/nabeken/go-api-now
 
-go 1.23
+go 1.24
 
 require (
 	github.com/fukata/golang-stats-api-handler v1.0.0
-	github.com/go-chi/chi/v5 v5.3.2
+	github.com/go-chi/chi/v5 v5.5.0
 )
